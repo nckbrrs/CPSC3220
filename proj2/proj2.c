@@ -405,10 +405,11 @@ void send_answer( int answer, struct buffer_element *element ){
 // ASSIGNMENT PART 3 - add the necessary code here
 //
 
+	sender = element->sender_address;
 	element->state = 3;
 	element->value = answer;
 	append_event_queue(element->receiver_address, element);
-	pthread_cond_signal(&waiting[element->sender_address]);
+	pthread_cond_signal(&waiting[sender]);
 
   pthread_mutex_unlock( &big_lock );
 }

@@ -1,3 +1,13 @@
+/*
+*	CPSC 3220
+*	Dr. Smotherman
+*	Spring 2017
+*
+*	Project 2
+*	Nicholas Barrs
+*/
+
+
 /* CPSC/ECE 3220 - Mark Smotherman - Spring 2017
  *
  * message passing adapted from Brinch Hansen, "RC 4000 Software:
@@ -343,7 +353,7 @@ void wait_message( int thread_id, int *sender, int *message,
 //
 
 	while (event_queue[thread_id]->next == event_queue[thread_id]) {
-		pthread_cont_wait(&waiting[thread_id], &big_lock);
+		pthread_cond_wait(&waiting[thread_id], &big_lock);
 	}
 	
 
@@ -397,8 +407,8 @@ void send_answer( int answer, struct buffer_element *element ){
 
 	element->state = 3;
 	element->value = answer;
-	append_event_queue(element->receiver_address->id, element);
-	pthread_cond_signal(&waiting[element->sender_address->id]);
+	append_event_queue(element->receiver_address, element);
+	pthread_cond_signal(&waiting[element->sender_address]);
 
   pthread_mutex_unlock( &big_lock );
 }
